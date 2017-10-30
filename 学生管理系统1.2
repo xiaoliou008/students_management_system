@@ -1,0 +1,167 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+struct info
+{
+        char name[20];
+        char num[20];
+        char sex;
+        int chinese;
+        int math;
+        int english;
+        float average;
+        struct info * next;
+};
+void create(struct info **);
+void print(struct info *);
+void ruber_table(struct info**);
+void ruber_item(struct info**);
+void insert_item(struct info**);
+int main()
+{
+        int n;
+        struct info * head;
+        head=NULL;
+        printf("学生管理系统\n1.创建链表\n2.删除链表\n3.打印链表\n4.插入数据\n5.删除数据\n6.计算平均成绩\n7.按平均成绩排序\n8.退出系统\n请选择操作序号:");
+        while(EOF!=scanf("%d",&n))
+        {
+                switch(n)
+                {
+                        case 1: create(&head);
+                                printf("请选择操作序号:");
+                                continue;
+                        case 2: ruber_table(&head);
+                                printf("请选择操作序号:");
+                                continue;
+                        case 3: print(head);
+                                printf("请选择操作序号:");
+                                continue;
+                        case 4: insert_item(&head);
+                                printf("请选择操作序号:");
+                                continue;
+                        case 5: ruber_item(&head);
+                                printf("请选择操作序号:");
+                                continue;
+                        default: break;
+                }
+                break;
+        }
+        return 0;
+}
+void create(struct info **headp)
+{
+        struct info * loc_head=NULL,*tail;
+        loc_head=(struct info *)malloc(sizeof(struct info));
+        printf("请输入学生姓名(拼音):");
+        getchar();
+        gets(loc_head->name);
+        tail=loc_head;
+        while(*(tail->name))
+        {
+                printf("学号:");
+                gets(tail->num);
+                printf("性别(m/w):");
+                tail->sex=getchar();
+                printf("语文:");
+                scanf("%d",&tail->chinese);
+                printf("数学:");
+                scanf("%d",&tail->math);
+                printf("英语:");
+                scanf("%d",&tail->english);
+                tail->next=(struct info *)malloc(sizeof(struct info));
+                tail=tail->next;
+                printf("请输入学生姓名或按回车键结束:");
+                getchar();
+                gets(tail->name);
+        }
+        *headp=loc_head;
+        tail->next=NULL;
+}
+void print(struct info *head)
+{
+        struct info * p=head;
+        if(p==NULL){
+                printf("暂无链表数据\n");return;}
+        else
+                printf("姓名             学号         性别  语文 数学 英语\n");
+        while(*(p->name))
+        {
+                printf("%-15s  %-10s   %c     %d    %d    %d\n",
+                p->name,p->num,p->sex,p->chinese,p->math,p->english);
+                p=p->next;
+        }
+}
+void ruber_table(struct info **headp)
+{
+        free(*headp);
+        *headp=NULL;
+        printf("成功删除链表\n");
+}
+void ruber_item(struct info **headp)
+{
+        if(*headp==NULL){
+                printf("暂无链表数据\n");return;}
+        char * numd;
+        numd=(char *)malloc(20*sizeof(char));
+        printf("请输入要删除信息的同学的学号：");
+        scanf("%s",numd);
+        struct info *p,*pre;
+        p=*headp;
+        while(strcmp(p->num,numd) && p->next!=NULL)
+        {
+                pre=p;
+                p=p->next;
+        }
+        if(p->next==NULL)
+                printf("没有该学生信息\n");
+        else if(p==*headp)
+        {
+                pre=*headp;
+                *headp=(*headp)->next;
+                free(pre);
+                if((*headp)->next==NULL)
+                       (*headp)=NULL;
+                printf("删除成功\n");
+        }
+        else
+        {
+                pre->next=p->next;
+                free(p);
+                printf("删除成功\n");
+        }
+        free(numd);
+}
+void insert_item(struct info **headp)
+{
+        if(*headp==NULL){
+                printf("暂无链表数据\n");return;}
+        char numd[20];
+        printf("请输入要插入位置的前一名同学的学号:");
+        scanf("%s",numd);
+        struct info *current=*headp,*after,*other;
+        while(strcmp(numd,current->num) && (current->next)!=NULL)
+                current=current->next;
+        if(current->next==NULL)
+                printf("没有该学生信息\n");
+        else
+        {
+                printf("请输入插入学生姓名(拼音)");
+                other=(struct info *)malloc(sizeof(struct info));
+                scanf("%s",other->name);
+                printf("学号");
+                scanf("%s",other->num);
+                printf("性别(m\w)");
+                getchar();
+                other->sex=getchar();
+                printf("语文:");
+                scanf("%d",&other->chinese);
+                printf("数学:");
+                scanf("%d",&other->math);
+                printf("英语:");
+                scanf("%d",&other->english);
+                other->next=current->next;
+                current->next=other;
+                printf("插入成功\n");
+        }
+
+}
