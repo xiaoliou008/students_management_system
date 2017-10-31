@@ -17,9 +17,11 @@ void print(struct info *);
 void ruber_table(struct info**);
 void ruber_item(struct info**);
 void insert_item(struct info**);
+void average(struct info*);
+void sort_table(struct info**);
 int main()
 {
-        int n;
+        int n=0;
         struct info * head;
         head=NULL;
         printf("学生管理系统\n1.创建链表\n2.删除链表\n3.打印链表\n4.插入数据\n5.删除数据\n6.计算平均成绩\n7.按平均成绩排序\n8.退出系统\n请选择操作序号:");
@@ -40,6 +42,12 @@ int main()
                                 printf("请选择操作序号:");
                                 continue;
                         case 5: ruber_item(&head);
+                                printf("请选择操作序号:");
+                                continue;
+                        case 6: average(head);
+                                printf("请选择操作序号:");
+                                continue;
+                        case 7: sort_table(&head);
                                 printf("请选择操作序号:");
                                 continue;
                         default: break;
@@ -164,4 +172,53 @@ void insert_item(struct info **headp)
                 printf("插入成功\n");
         }
 
+}
+void average(struct info * head)
+{
+        if(head==NULL)
+                printf("暂无链表数据\n");
+        else
+        {
+                struct info * p=head;
+                while(p->next!=NULL)
+                {
+                        p->average=(p->chinese+p->math+p->english)/3.0;
+                        p=p->next;
+                }
+                printf("姓名             学号         平均分\n");
+                p=head;
+                while(p->next!=NULL)
+                {
+                        printf("%-15s  %-10s   %.2f\n",p->name,p->num,p->average);
+                        p=p->next;
+                }
+        }
+}
+sort_table(struct info**headp)
+{
+        if(*headp==NULL){
+                printf("暂无链表数据\n");return;}
+        struct info *prior1,*prior2,*p1,*p2,*t;
+        p1=(struct info*)malloc(sizeof(struct info));
+        p1->next=*headp;
+        *headp=prior1=p1;
+        for(p1=prior1->next;p1->next->next!=NULL;prior1=p1,p1=p1->next)
+        {
+                for(p2=p1->next,prior2=p1;p2->next!=NULL;prior2=p2,p2=p2->next)
+                {
+                        if(p1->average < p2->average)
+                        {
+                                t=p2->next;
+                                prior1->next=p2;
+                                prior2->next=p1;
+                                p2->next=p1->next;
+                                p1->next=t;
+                                t=p1;p1=p2;p2=t;
+                        }
+                }
+        }
+        printf("排序完成\n");
+        p1=*headp;
+        *headp=p1->next;
+        free(p1);
 }
