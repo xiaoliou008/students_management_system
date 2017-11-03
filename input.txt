@@ -1,0 +1,3 @@
+liujingping U201714624 m 99 99 99
+xiaoming U201714000 m 97 98 99
+xiaohong U201714666 w 100 100 100
