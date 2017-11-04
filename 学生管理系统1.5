@@ -20,6 +20,7 @@ void insert_item(struct info**);
 void average(struct info*);
 void sort_table(struct info**);
 void readin(struct info**,FILE *);
+void putout(struct info*);
 int main(int argc, char *argv[])
 {
         int n=0;
@@ -30,7 +31,7 @@ int main(int argc, char *argv[])
                 FILE *fp;
                 if((fp=fopen(argv[1],"r"))==NULL)
                 {
-                        printf("Can't open %s\n",argv[1]);
+                        printf("无法打开文件%s\n",argv[1]);
                         exit(EXIT_FAILURE);
                 }
                 readin(&head,fp);
@@ -111,6 +112,7 @@ void print(struct info *head)
                 p->name,p->num,p->sex,p->chinese,p->math,p->english);
                 p=p->next;
         }
+        putout(head);
 }
 void ruber_table(struct info **headp)
 {
@@ -249,4 +251,22 @@ void readin(struct info **headp,FILE *fp)
         tail->next=NULL;
         strcpy(tail->name,"\0");
         *headp=loc_head;
+}
+void putout(struct info *p)
+{
+        FILE * out;
+        if((out=fopen("output.txt","w"))==NULL)
+                printf("无法创建链表输出文件");
+        else
+        {
+                fprintf(out,"姓名             学号         性别  语文 数学 英语\n");
+                while(*(p->name))
+                {
+                        fprintf(out,"%-15s  %-10s   %s     %d    %d    %d\n",
+                        p->name,p->num,p->sex,p->chinese,p->math,p->english);
+                        p=p->next;
+                }
+                printf("链表已保存到output.txt\n");
+        }
+        fclose(out);
 }
