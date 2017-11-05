@@ -12,8 +12,8 @@ struct info
         float average;
         struct info * next;
 };
-void create(struct info **);
-void print(struct info *);
+void create(struct info **);            
+void print(struct info *);              //既打印在屏幕上，也生成output.txt保存数据
 void ruber_table(struct info**);
 void ruber_item(struct info**);
 void insert_item(struct info**);
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
         int n=0;
         struct info * head;
         head=NULL;
-        if(argc==2)
+        if(argc==2)             //如果有文件输入，则读取文件中的表格
         {
                 FILE *fp;
                 if((fp=fopen(argv[1],"r"))==NULL)
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 void create(struct info **headp)
 {
         struct info * loc_head=NULL,*tail;
-        loc_head=(struct info *)malloc(sizeof(struct info));
+        loc_head=(struct info *)malloc(sizeof(struct info));            //创建动态内存
         printf("请输入学生姓名(拼音):");
         getchar();
         gets(loc_head->name);
@@ -94,7 +94,7 @@ void create(struct info **headp)
                 tail=tail->next;
                 printf("请输入学生姓名或按回车键结束:");
                 getchar();
-                gets(tail->name);
+                gets(tail->name);               //最后一份info的姓名为'\0',next指向NULL
         }
         *headp=loc_head;
         tail->next=NULL;
@@ -182,7 +182,7 @@ void insert_item(struct info **headp)
                 scanf("%d",&other->math);
                 printf("英语:");
                 scanf("%d",&other->english);
-                other->next=current->next;
+                other->next=current->next;              //将other插入current 和 current->next中
                 current->next=other;
                 printf("插入成功\n");
         }
@@ -217,7 +217,7 @@ sort_table(struct info**headp)
         p1=(struct info*)malloc(sizeof(struct info));
         p1->next=*headp;
         *headp=prior1=p1;
-        for(p1=prior1->next;p1->next->next!=NULL;prior1=p1,p1=p1->next)
+        for(p1=prior1->next;p1->next->next!=NULL;prior1=p1,p1=p1->next)                 //冒泡排序
         {
                 for(p2=p1->next,prior2=p1;p2->next!=NULL;prior2=p2,p2=p2->next)
                 {
